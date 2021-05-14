@@ -1,2 +1,2 @@
 # tracin
-Trying out implementing tracin
+Implementation of tracin
