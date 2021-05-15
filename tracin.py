@@ -11,7 +11,17 @@ def influence(expl_x,
               model, 
               eta,
               num_epochs):
-    """ Compute influence of explicand on reference
+    """ Basic implementation of TracIn that aims to
+    compute influence of explicand (training example) on 
+    reference (testing example)
+    
+    Future work (Speed):
+     - Compute gradients with respect to many samples in tf
+     
+    Future work (Speed at cost of noise)
+     - Random projections to speed up computation
+     - Allow computation with subsample of checkpoints
+     - Fast random projections for dense layers
     
     Args
      - expl_x : explicand features
