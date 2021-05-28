@@ -10,7 +10,8 @@ def influence(expl_x,
               mpath, 
               model, 
               eta,
-              num_epochs):
+              num_epochs,
+              loss_fn = None):
     """ Basic implementation of TracIn that aims to
     compute influence of explicand (training example) on 
     reference (testing example)
@@ -31,13 +32,17 @@ def influence(expl_x,
      - mpath : model path including {} to format epoch iter
      - model : model object for loading weight parameters
      - num_epochs : number of epochs
+     - loss_fn : loss function to explain
     
     Returns
      - tracin_sum : measure of influence
         
     """
-    loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+    # Default to sparse categorical crossentropy
+    if not loss_fn:
+        loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
+    # Compute influences
     influence = np.zeros((expl_x.shape[0],refe_x.shape[0]))
     for epoch_iter in range(1,num_epochs+1):
         
