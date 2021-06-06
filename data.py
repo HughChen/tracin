@@ -1,6 +1,18 @@
+import tensorflow as tf
 import pandas as pd
 
+def mnist_data():
+    """ Load MNIST digits data (classification)
+    """
+    
+    (trainX, trainY),(testX, testY) = tf.keras.datasets.mnist.load_data()
+    trainX = trainX.reshape(-1, 28 * 28) / 255.0
+    testX  = testX.reshape(-1, 28 * 28) / 255.0
+    return(trainX, trainY, testX, testY)
+
 def fuel_data():
+    """ Load fuel efficiency data (regression)
+    """
     url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data'
     column_names = ['MPG', 'Cylinders', 'Displacement', 'Horsepower', 'Weight',
                     'Acceleration', 'Model Year', 'Origin']
