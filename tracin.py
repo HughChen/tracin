@@ -16,13 +16,14 @@ def influence(expl_x,
     compute influence of explicand (training example) on 
     reference (testing example)
     
-    Future work (Speed):
-     - Compute gradients with respect to many samples in tf
-     
-    Future work (Speed at cost of noise)
-     - Random projections to speed up computation
-     - Allow computation with subsample of checkpoints
-     - Fast random projections for dense layers
+    Future todos
+     - Optimization
+         - Compute gradients with respect to many samples in tf
+     - Optimization (random projections)
+         - Random projections to speed up computation
+         - Allow computation with subsample of checkpoints
+         - Fast random projections for dense layers
+     - Automatically find learning rate and loss function
     
     Args
      - expl_x : explicand features
