@@ -23,6 +23,26 @@ def plot_loss(history):
     plt.legend()
     plt.grid(True)
 
+def load_mnist(is_compile=True):
+    """ Load MNIST model
+    """
+    # Form model
+    model = models.Sequential([
+      layers.Dense(128,input_shape=(784,),activation='relu'),
+      layers.Dense(10)
+    ])
+
+    if is_compile:
+        # Compile model
+        eta = 0.001
+        model.compile(
+            optimizer=tf.keras.optimizers.SGD(eta),
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
+        )
+    
+    return(model)
+    
 def train_mnist(trainX, trainY, verbose=0):
     """ Train and checkpoint MLP for MNIST
     
@@ -34,22 +54,10 @@ def train_mnist(trainX, trainY, verbose=0):
      - model   : trained model
      - history : training history
     """
-    
-    # Form model
-    model = models.Sequential([
-      layers.Dense(128,input_shape=(784,),activation='relu'),
-      layers.Dense(10)
-    ])
+    # Load compiled model
+    model = load_mnist()
 
-    # Compile model
-    eta = 0.001
-    model.compile(
-        optimizer=tf.keras.optimizers.SGD(eta),
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        metrics=[tf.keras.metrics.SparseCategoricalAccuracy()],
-    )
-
-    # Callback to chheckpoint models
+    # Callback to checkpoint models
     checkpoint_callback = ModelCheckpoint(
         filepath="model/mnist/model{epoch}.hdf5",
         save_weights_only=True,
@@ -67,18 +75,9 @@ def train_mnist(trainX, trainY, verbose=0):
     
     return(model, history)
 
-def train_fuel(trainX, trainY, verbose=0):
-    """ Train and checkpoint MLP for fuel efficiency data set
-    
-    Args
-     - trainX : fuel efficiency features
-     - trainY : miles per gallon (MPG) labels
-    
-    Returns
-     - model   : trained model
-     - history : training history
+def load_fuel(is_compile=True):
+    """ Load fuel model
     """
-    
     # Normalization
     normalizer = preprocessing.Normalization()
     normalizer.adapt(np.array(trainX))
@@ -96,10 +95,27 @@ def train_fuel(trainX, trainY, verbose=0):
         layers.Dense(64, activation='relu'),
         layers.Dense(1)
     ])
+    
+    if is_compile:
+        # Compile model
+        model.compile(loss=MeanSquaredError(),
+                      optimizer=tf.keras.optimizers.SGD())
+    
+    return(model)
 
-    # Compile model
-    model.compile(loss=MeanSquaredError(),
-                  optimizer=tf.keras.optimizers.SGD())
+def train_fuel(trainX, trainY, verbose=0):
+    """ Train and checkpoint MLP for fuel efficiency data set
+    
+    Args
+     - trainX : fuel efficiency features
+     - trainY : miles per gallon (MPG) labels
+    
+    Returns
+     - model   : trained model
+     - history : training history
+    """
+    # Load compiled model
+    model = load_fuel()
 
     # Train model
     history = model.fit(
