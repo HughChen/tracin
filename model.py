@@ -75,7 +75,7 @@ def train_mnist(trainX, trainY, verbose=0):
     
     return(model, history)
 
-def load_fuel(is_compile=True):
+def load_fuel(trainX, is_compile=True):
     """ Load fuel model
     """
     # Normalization
@@ -115,7 +115,7 @@ def train_fuel(trainX, trainY, verbose=0):
      - history : training history
     """
     # Load compiled model
-    model = load_fuel()
+    model = load_fuel(trainX)
 
     # Train model
     history = model.fit(
